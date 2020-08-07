@@ -1,0 +1,102 @@
+{% extends "public/templates/public_template.html" %}
+{% block title %}Upload{% endblock %}
+{% block main %}
+<link type='text/css' rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js?autoload=true&amp;skin=desert&amp;lang=css" defer=""></script>
+<script type="text/javascript">
+addEventListener('load', function(event) { PR.prettyPrint(); }, false);
+</script>
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<h1>Subir archivo</h1>
+			<hr>
+			<h2>Paso 1: Seleccionar tipo de elemento</h2>
+			<select id="tipo_edx" name="tipo_edx" class="form-control form-control-sm" form="select-tipo">
+				{{ templates.desplegable("pdf" , "Subir PDF" )|safe }}
+					{#
+				{{ templates.desplegable("genially" , "Subir genially")|safe }}
+				{{ templates.desplegable("video" , "Subir Video")|safe }}
+				{{ templates.desplegable("imagen" , "Subir Imagen")|safe }}
+				{{ templates.desplegable("recap", "Subir Recapitulemos")|safe }}
+				{{ templates.desplegable("otro" , "Otro")|safe }}
+					#}
+			</select>
+			<form action="/uploads" id="select-tipo" method="POST" enctype="multipart/form-data">
+			<input type="submit" name="form-button" id="form-button" class="btn btn-primary" value="Elegir"/>
+			</form>
+		</div>
+	</div>
+
+	{%if segundo_paso%}
+	<div class="row" style="margin-top:20px">
+		<div class="col">
+			<h2>Paso 2: Rellenar formulario de {{segundo_paso}}</h2>
+			
+
+			{% macro render_field(field) %}
+				{% if field.type == 'FileField' %}
+					{{ field.label(class_='custom-file-label') }}
+					{{ field(**kwargs)|safe }}
+				{% elif field.type == 'HiddenField' %}
+					{{field(value = segundo_paso)}}
+				{% else %}			
+					{{ field.label }}
+					{{ field(**kwargs)|safe }}
+				{% endif %}
+				
+				{% if field.errors %}
+					<ul class=errors>
+					{% for error in field.errors %}
+						<li>{{ error }}</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			{% endmacro %}
+			
+			<form action="/uploads" id="select-params" method="POST" enctype="multipart/form-data">
+				{% for field in form %}
+					{% if field.type == 'FileField'%}
+						<p>{{field.description}}</p>
+						<div class="custom-file" style="display:block">
+							{{ render_field(field) }}
+						</div>
+					{% else %}
+						{{ render_field(field) }}
+					{% endif %}
+				{% endfor %}
+				<br/>
+				<input type="submit" name="form-button" id="form-button" class="btn btn-primary" value="Enviar"/>
+			</form>
+			
+		</div>
+	</div>
+	{% endif %}
+
+	
+	{% if tercer_paso %}
+	
+	<div class="row" style="margin-top:20px">
+		<div class="col" style="max-width:100%">
+			<p>Subida exitosaa!</p>
+			<pre class="prettyprint" style="white-space: pre-wrap;">
+  				<code id="cajacodigo" class="language-xhtml"></code>
+  			</pre>
+			<script type="text/javascript">
+				if (document.getElementById('cajacodigo') != null){
+					document.getElementById('cajacodigo').textContent = formatCode("{{codigo_mostrar}}".replace("\\","/"), true, true);
+
+				}
+			</script>
+
+			<div class="display">
+				{{codigo_mostrar|safe}}"
+			</div>
+		</div>
+	</div>
+
+	{% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,8 @@
+.custom-file-input:lang(es)~.custom-file-label::after {
+    content: "Buscar";
+}
+
+.custom-file, .form-control{
+	max-width: 40%;
+	margin:20px 0px;
+}
