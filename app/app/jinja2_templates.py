@@ -74,13 +74,12 @@ def generar_params(requeste):
 					##'local_url': os.path.join('resources'+os.path.sep + requeste.form['opciones_programas'],image.filename)
 				}
 	elif requeste.form['escondido_field'] == 'genially':
-		return {'genially_url':'https://view.genial.ly/5e32e18a98f5d33c6d5130ee'}
+		return {'genially_url':requeste.form['url_genially']}
 	elif requeste.form['escondido_field'] == 'video':
 		pass
 	elif requeste.form['escondido_field'] == 'imagen':
 		pass
 	elif requeste.form['escondido_field'] == 'recap':
-		bp()
 		return {'recap_html': requeste.form['input_html5'].replace('"',"'")}
 	else:
 		pass

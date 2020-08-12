@@ -1,4 +1,5 @@
 {% extends "public/templates/public_template.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
 {% block title %}Upload{% endblock %}
 {% block main %}
 <link type='text/css' rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
@@ -16,8 +17,8 @@ addEventListener('load', function(event) { PR.prettyPrint(); }, false);
 			<select id="tipo_edx" name="tipo_edx" class="form-control form-control-sm" form="select-tipo">
 				{{ templates.desplegable("pdf" , "Subir PDF" )|safe }}
 				{{ templates.desplegable("recap" , "Subir Recapitulemos" )|safe }}
-					{#
 				{{ templates.desplegable("genially" , "Subir genially")|safe }}
+					{#
 				{{ templates.desplegable("video" , "Subir Video")|safe }}
 				{{ templates.desplegable("imagen" , "Subir Imagen")|safe }}
 				{{ templates.desplegable("recap", "Subir Recapitulemos")|safe }}
@@ -29,7 +30,7 @@ addEventListener('load', function(event) { PR.prettyPrint(); }, false);
 			</form>
 		</div>
 	</div>
-
+	
 	{%if segundo_paso%}
 	<div class="row" style="margin-top:20px">
 		<div class="col">
@@ -42,9 +43,14 @@ addEventListener('load', function(event) { PR.prettyPrint(); }, false);
 					{{ field(**kwargs)|safe }}
 				{% elif field.type == 'HiddenField' %}
 					{{field(value = segundo_paso)}}
-				{% else %}			
-					{{ field.label }}
+				{% elif field.type == 'ExtendedTextAreaField' %}
 					{{ field(**kwargs)|safe }}
+				{% else %}			
+						{#
+					{{% field.label %}}
+					{{% field(**kwargs)|safe %}}
+						#}
+					{{ wtf.form_field(field) }}
 				{% endif %}
 				
 				{% if field.errors %}

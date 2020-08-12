@@ -3,12 +3,14 @@ from flask import render_template
 import os
 from flask import send_from_directory
 from flask import request, redirect
+from flask_bootstrap import Bootstrap
 from app import jinja2_templates
 from app.formas_tipo import *
 from pdb import set_trace as bp
 
-app.config["IMAGE_UPLOADS"] = os.path.join(app.root_path,"uploads")
+Bootstrap(app)
 
+app.config["IMAGE_UPLOADS"] = os.path.join(app.root_path,"uploads")
 @app.route("/")
 def index():
 	return render_template("public/index.html")

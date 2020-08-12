@@ -15,6 +15,11 @@ body {
     margin: 0 auto;
 }
 
+.custom-file-label::after {
+
+  content: "Buscar" !important;
+}
+
 footer{
 	bottom:0	;
 	position:absolute;

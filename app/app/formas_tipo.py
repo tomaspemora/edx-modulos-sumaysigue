@@ -1,7 +1,9 @@
 from wtforms import Form, SubmitField, FileField,StringField, validators, SelectField, HiddenField, TextAreaField
 from wtforms.widgets import HTMLString, html_params
+from wtforms.fields.html5 import URLField
 from app.wtforms_extended_selectfield import ExtendedSelectField
 from app.wtforms_extended_textareafield import ExtendedTextAreaField
+
 import re
 from pdb import set_trace as bp
 
@@ -50,7 +52,8 @@ class FichasForm(Form):
 	pass
 
 class GenForm(Form):
-	pass
+	escondido_field = HiddenField()
+	url_genially = URLField(u'Ingrese la url del genially')
 
 class VideoForm(Form):
 	pass
@@ -60,4 +63,4 @@ class ImageForm(Form):
 
 class RecapForm(Form):
 	escondido_field = HiddenField()
-	text_area_html = ExtendedTextAreaField(id='input_html5')
+	text_area_html = ExtendedTextAreaField(id='input_html5', label=None)
