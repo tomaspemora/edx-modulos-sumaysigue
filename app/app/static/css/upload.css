@@ -6,3 +6,26 @@
 	max-width: 40%;
 	margin:20px 0px;
 }
+
+
+.display:first-of-type{
+	margin-top: 100px;
+}
+
+.display{
+		margin-top:10px;
+	    background-color: #e0e0e0;
+	    padding: 30px;
+	    border-radius: 20px;
+
+}
+
+.cleditorInstrucciones {
+    font-size: 10px;
+    text-align: right;
+    position: relative;
+    display: block;
+    margin-top: -30px;
+    background-color: #efefef;
+    padding: 5px 17px;
+}

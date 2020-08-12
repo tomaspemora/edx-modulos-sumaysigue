@@ -15,6 +15,7 @@ addEventListener('load', function(event) { PR.prettyPrint(); }, false);
 			<h2>Paso 1: Seleccionar tipo de elemento</h2>
 			<select id="tipo_edx" name="tipo_edx" class="form-control form-control-sm" form="select-tipo">
 				{{ templates.desplegable("pdf" , "Subir PDF" )|safe }}
+				{{ templates.desplegable("recap" , "Subir Recapitulemos" )|safe }}
 					{#
 				{{ templates.desplegable("genially" , "Subir genially")|safe }}
 				{{ templates.desplegable("video" , "Subir Video")|safe }}
@@ -80,19 +81,25 @@ addEventListener('load', function(event) { PR.prettyPrint(); }, false);
 	<div class="row" style="margin-top:20px">
 		<div class="col" style="max-width:100%">
 			<p>Subida exitosaa!</p>
-			<pre class="prettyprint" style="white-space: pre-wrap;">
-  				<code id="cajacodigo" class="language-xhtml"></code>
-  			</pre>
-			<script type="text/javascript">
-				if (document.getElementById('cajacodigo') != null){
-					document.getElementById('cajacodigo').textContent = formatCode("{{codigo_mostrar}}".replace("\\","/"), true, true);
+			{% for key, value in codigo_mostrar.items() %}
+				<h1>Bloque nº {{key[-1]}}: {{key[0:-2]}}</h1>
+				<pre class="prettyprint" style="padding:0 20px;white-space: pre-wrap;">
+					<code id="cajacodigo-{{key}}" class="language-xhtml"></code>
+				</pre>
+				
+			
+				<script type="text/javascript">
+				if (document.getElementById('cajacodigo-{{key}}') != null){
+					document.getElementById('cajacodigo-{{key}}').textContent = formatCode(`{{value}}`, true, true);
 
 				}
-			</script>
-
-			<div class="display">
-				{{codigo_mostrar|safe}}"
-			</div>
+				</script>
+			{% endfor %}
+			{% for key, value in codigo_mostrar.items() %}
+				<div class="display">
+					{{value.replace('\/','/')|safe}}
+				</div>
+			{%endfor%}
 		</div>
 	</div>
 

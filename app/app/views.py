@@ -40,7 +40,7 @@ def uploads():
 				form = form)
 
 		else:
-			if request.files:
+			if ((request.form['escondido_field'] == 'pdf' or request.form['escondido_field'] == 'imagen') and request.files) or (request.form['escondido_field'] == 'genially' or request.form['escondido_field'] == 'video' or request.form['escondido_field'] == 'recap') and request.form:
 				params = jinja2_templates.generar_params(request)
 				#image = request.files["fileinput"]
 				#image.save(os.path.join(app.config["IMAGE_UPLOADS"], image.filename))
@@ -54,6 +54,7 @@ def uploads():
 					form = ImageForm(request.form)
 				elif request.form['escondido_field'] == 'recap':
 					form =  RecapForm(request.form)
+				print(jinja2_templates.subir_codigo(request.form['escondido_field'],params))
 				return render_template("public/uploads.html",
 					tercer_paso="success", 
 					segundo_paso=request.form['escondido_field'], 

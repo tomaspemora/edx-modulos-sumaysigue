@@ -1,8 +1,9 @@
-from wtforms import Form, SubmitField, FileField,StringField, validators, SelectField, HiddenField
-
+from wtforms import Form, SubmitField, FileField,StringField, validators, SelectField, HiddenField, TextAreaField
+from wtforms.widgets import HTMLString, html_params
 from app.wtforms_extended_selectfield import ExtendedSelectField
+from app.wtforms_extended_textareafield import ExtendedTextAreaField
 import re
-
+from pdb import set_trace as bp
 
 style={'class':'form-control'}
 style_file = {'class':'custom-file-input'}
@@ -58,4 +59,5 @@ class ImageForm(Form):
 	pass
 
 class RecapForm(Form):
-	pass
+	escondido_field = HiddenField()
+	text_area_html = ExtendedTextAreaField(id='input_html5')
