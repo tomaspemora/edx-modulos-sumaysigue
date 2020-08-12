@@ -23,12 +23,13 @@
 .cleditorInstrucciones {
     font-size: 10px;
     text-align: right;
-    position: relative;
+    position: absolute;
     display: block;
-    margin-top: -1px;
+    float: right;
+    bottom: 10%;
+    right: 1.5%;
     background-color: #efefef;
     padding: 5px 17px;
-}
 
 .cleditorMain{
     margin-bottom: 20px;
