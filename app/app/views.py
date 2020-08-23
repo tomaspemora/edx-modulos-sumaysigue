@@ -8,6 +8,11 @@ from app import jinja2_templates
 from app.formas_tipo import *
 from pdb import set_trace as bp
 
+
+
+
+from random import randrange
+
 Bootstrap(app)
 
 app.config["IMAGE_UPLOADS"] = os.path.join(app.root_path,"uploads")
@@ -19,6 +24,14 @@ def index():
 @app.route("/about")
 def about():
 	return render_template("public/about.html")
+
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+	form_addtask = AddTask(extra_classes='form-inline')
+	if request.method == "POST":
+		return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange)
+	return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange)
 
 
 @app.route("/uploads", methods=["GET", "POST"])

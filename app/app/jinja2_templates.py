@@ -14,16 +14,6 @@ def server_connnect():
 	s = ssh_client.open_sftp()
 	return s
 
-	# cnopts = pysftp.CnOpts()
-	# cnopts.hostkeys = None
-	# srv = pysftp.Connection(host=static_server, username="edustatic",
-	# password="qD7pcVQF", port=2837, private_key=".ppk", cnopts=cnopts)
-	# # Get the directory and file listing
-	# return srv
-
-# Closes the connection
-#srv.close()
-
 def input_radio(name,display_text,tipo_formulario):
 	return "<input type='radio' id='"+name+"' name='"+tipo_formulario+"' value='"+name+"'><label for='"+name+"'' style='margin-left:10px;user-select:none'>"+display_text+"</label><br>"
 
