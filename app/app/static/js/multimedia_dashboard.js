@@ -102,15 +102,35 @@ $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
 
     $('.semanitas').each(function(){
-      console.log($(this))
       $(this).after('<div class="semana-header col"><div class="semana-inner">'+getMonday($(this)[0].valueAsDate)+' al '+getFriday($(this)[0].valueAsDate)+'</div></div>');
 
     });
+
+
+    var div1 = "#col-separator-diseno"
+    var div2 = "#col-separator-programacion"
+    var div3 = "#col-header-semanas"
+
+    //$(div1).scroll(function () { $(div2).scrollLeft($(div1).scrollLeft()); });
+    //$(div2).scroll(function () { $(div1).scrollLeft($(div2).scrollLeft()); });
+
+
+    var ignoreScrollEvents = false
+    function syncScroll(element1, element2,element3) {
+      element1.scroll(function (e) {
+        var ignore = ignoreScrollEvents
+        ignoreScrollEvents = false
+        if (ignore) return
+
+        ignoreScrollEvents = true
+        console.log(element1.scrollLeft());
+        //console.log(inner.offsetTop - element1[1].scrollTop)
+        element2.scrollLeft(element1.scrollLeft());
+        element3.scrollLeft(element1.scrollLeft());
+      });
+    }
+    syncScroll($(div1), $(div2), $(div3));
+    syncScroll($(div2), $(div1), $(div3));
+    syncScroll($(div3), $(div2), $(div1));
 });
 
-
-
-
-
-
-getMonday(new Date());

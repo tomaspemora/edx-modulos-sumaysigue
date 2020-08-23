@@ -8,23 +8,23 @@
 
 
 
-
+	{% set semanas = 25 %}
 	<div id="section-top" class="row">
 		<div class="col-sm-1">
 			<div id="backhome" >
 				<a role="button" class="btn btn-primary" href="/">Volver a inicio</a>
 			</div>
 		</div>
-		<div class="col columna-sin-overflow bg-success">
+		<div id="col-header-semanas" class="col columna-sin-overflow bg-success">
 			<div class="row row-de-semanas row-semanas-header">
-				{% for i in range(12,54) %}
+				{% for i in range(12,12+semanas) %}
 					{%if i < 10 %}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2020-W0{{i}}"step="1">
 					{%else%}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2020-W{{i}}"step="1">
 					{%endif%}
 				{% endfor %}
-				{% for i in range(1,53) %}
+				{% for i in range(1,0) %}
 					{%if i < 10 %}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2021-W0{{i}}"step="1">
 					{%else%}
@@ -43,9 +43,9 @@
 						Diseño⠀⠀⠀⠀
 					</div>
 				</div>
-				<div class="col columna-sin-overflow">
+				<div id="col-separator-programacion" class="col columna-sin-overflow">
 					<div class="row row-de-semanas">
-						{% for i in range(1,15) %}
+						{% for i in range(1,semanas) %}
 						<div class="col semanas">
 							{% for j in range(1,5) %}
 								{% if randrange(10)>3 %}
@@ -63,7 +63,7 @@
 						{% endfor %}
 					</div>
 					<div class="row row-de-semanas">
-						{% for i in range(1,15) %}
+						{% for i in range(1,semanas) %}
 						<div class="col semanas">
 							{% for j in range(1,5) %}
 								{% if randrange(10)>3 %}
@@ -89,11 +89,11 @@
 						Programación
 					</div>
 				</div>
-				<div class="col columna-sin-overflow">
+				<div id="col-separator-diseno" class="col columna-sin-overflow">
 					<div class="row row-de-semanas">
-						{% for i in range(1,15) %}
+						{% for i in range(1,semanas) %}
 						<div class="col semanas">
-							{% for j in range(1,5) %}
+							{% for j in range(1,10) %}
 								{% if randrange(10)>3 %}
 								<div data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?" class="i_{{i}} j_{{j}}" id="i_{{i}}_j_{{j}}">
 									<span>prog_sem_{{i}}_tarea_{{j}} askdjlaskjdkasjdklsjldjasldjasdjaskld</span>
