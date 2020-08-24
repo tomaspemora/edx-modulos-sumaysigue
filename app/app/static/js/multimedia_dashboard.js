@@ -17,7 +17,10 @@ function getFriday(d) {
 }
 
 
-// Make the DIV element draggable:
+// 
+// implementación sistema arrastrable para formulario add task
+//
+
 dragElement(document.getElementById("addtask"));
 
 function dragElement(elmnt) {
@@ -67,15 +70,20 @@ function dragElement(elmnt) {
   }
 }
 
+
+
+
 $(document).ready(function(){
+
+    //
+    // barra para cambiar tamaño de las secciones (arastable y cambios de tamaño)
+    // 
+
     $('#separator-prog-diseno').on('mousedown', function(e){
         e.preventDefault();
         var $dragable = $(this),
-            //startHeight = parseFloat($dragable.css('min-height')),
             startHeight = $dragable.offset().top;
             pY = e.pageY; 
-            console.log(e.pageY - $(this).offset().top)
-            console.log('pY->'+ pY );
         $(document).on('mouseup', function(e){
             $(document).off('mouseup').off('mousemove');
         });
@@ -85,27 +93,66 @@ $(document).ready(function(){
             var my = - (me.pageY - pY);
             var tot =  parseFloat($dragable.next().css('height'))+parseFloat($dragable.prev().css('height')) 
             if ( Math.min(startHeight - my - parseFloat($('#section-top').css('min-height')),tot-20)>72){
+              
+              // Máxima altura para el bloque de tasks de diseño dado por las filas de cada diseñador.
+              var totalHeight = 0;
+              $dragable.prev().children('#col-separator-diseno').children().each(function(){
+                  totalHeight = totalHeight + $(this).outerHeight(true);
+              });
+
               $dragable.prev().css({
-                  'height': Math.min(startHeight - my - parseFloat($('#section-top').css('min-height')),tot-20)
+                  'height': Math.min(Math.min(startHeight - my - parseFloat($('#section-top').css('min-height')),tot-20),totalHeight)
               });
               $dragable.next().css({
                   'height' : tot -  parseFloat($dragable.prev().css('height'))
               });
               var tot2 =  parseFloat($dragable.next().css('height'))+parseFloat($dragable.prev().css('height'));
-              //- parseFloat($('#section-top').css('min-height')) 
-              console.log('prev->'+$dragable.prev().css('height')+' next->'+$dragable.next().css('height') +'tot1->'+tot+ ' tot2->' +tot2  + ' draggable->' + $dragable.css('height'))
-          }
-        });
-                
+              
+            }
+        });        
     });
 
-    $('[data-toggle="popover"]').popover();
+    //
+    // Popover de cada task
+    //
+
+    $('[data-toggle="popover"]').popover({template:'<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>',html:true,content:function(){return $(this).html();},delay:{ "show": 50, "hide": 50 },trigger:'click'});
+      $('[data-toggle="popover"]').on('click', function(){
+        $('[data-toggle="popover"]').not(this).popover('hide');
+    });
+
+    //
+    // Aca se agregan los divs correspondiente a cada semana, sacnado la info del input agregado en jinja
+    //
 
     $('.semanitas').each(function(){
       $(this).after('<div class="semana-header col"><div class="semana-inner">'+getMonday($(this)[0].valueAsDate)+' al '+getFriday($(this)[0].valueAsDate)+'</div></div>');
 
-    });
+    //
+    // Modificar los heights de los tags de encargados en función de los cambios en las rows de tasks
+    //
 
+    $('.row-de-semanas').each(function(){
+        var elmnt = $(this)[0];
+        new ResizeSensor(elmnt, function(){ 
+            //console.log(elmnt);
+            $('div[id^="encargado-"]').each(function(){
+              $('#tag-'+$(this).attr('id')).height($(this).height());
+            });
+            // ACA IMPLEMENTAR LOS CAMBIOS DE ALTURA PARA LOS TAGS DE ENCARGADOS  
+        });
+      });
+     $('div[id^="encargado-"]').each(function(){
+              $('#tag-'+$(this).attr('id')).height($(this).height());
+            });
+
+
+    }); // fin document ready
+
+
+//
+// Sincronización de los scrolls horizontales semanas - diseño - programación
+//
 
     var div1 = "#col-separator-diseno"
     var div2 = "#col-separator-programacion"
@@ -123,7 +170,7 @@ $(document).ready(function(){
         if (ignore) return
 
         ignoreScrollEvents = true
-        console.log(element1.scrollLeft());
+        //console.log(element1.scrollLeft());
         //console.log(inner.offsetTop - element1[1].scrollTop)
         element2.scrollLeft(element1.scrollLeft());
         element3.scrollLeft(element1.scrollLeft());
@@ -132,5 +179,54 @@ $(document).ready(function(){
     syncScroll($(div1), $(div2), $(div3));
     syncScroll($(div2), $(div1), $(div3));
     syncScroll($(div3), $(div2), $(div1));
-});
 
+
+//
+// Sincronización de los scroll verticales tag-diseno <> tasks-diseno y tags-prog <> tasks-programacion
+//
+
+
+/*...
+  Luego de esto ir al backend.
+*/
+
+
+//
+// Implementación del sistema de drag and drop de los tasks
+//
+
+  $('div[class^="i"]').each(function(){
+    var $el = $(this);
+     $el.draggable({
+          //connectToSortable: ".semanas",
+          revert: "invalid",
+          cursor: "grabbing",
+          helper: "clone",
+          containment:$el.parent().parent().parent(),
+          opacity: 1,
+          zIndex: 2,
+          drag: function(event,ui){
+            $(this).css('z-index',2);$(this).parent().append($(this));
+            
+          },
+          stop: function(){$(this).css('z-index','');$(this).parent().append($(this));$(this).css('position','');}
+
+    });
+  });
+
+
+
+  $('.semanas-diseno, .semanas-prog').droppable(
+    {
+
+      drop: function(event, ui) {
+          //console.log($(this).attr('class').match(/semanas-(diseno|prog)/g)[0] );
+          //console.log(ui.draggable.parent().attr('class').match(/semanas-(diseno|prog)/g)[0]);
+          if($(this).attr('class').match(/semanas-(diseno|prog)/g)[0] == ui.draggable.parent().attr('class').match(/semanas-(diseno|prog)/g)[0]){
+            ui.draggable.detach().appendTo($(this));
+          }
+        }
+    }
+
+    );
+});
