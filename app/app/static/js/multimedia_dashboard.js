@@ -186,6 +186,29 @@ $(document).ready(function(){
 //
 
 
+    var div1_1 = "#headers-diseno"
+    var div1_2 = "#col-separator-diseno"
+    var div2_1 = "#headers-programacion"
+    var div2_2 = "#col-separator-programacion"
+
+    var ignoreScrollEvents2 = false
+    function syncScrollVert(element1, element2) {
+      element1.scroll(function (e) {
+        var ignore = ignoreScrollEvents2
+        ignoreScrollEvents2 = false
+        if (ignore) return
+
+        ignoreScrollEvents2 = true
+        element2.scrollTop(element1.scrollTop());
+        //element2.scrollTop(element1.scrollTop());
+      });
+    }
+    syncScrollVert($(div1_1), $(div1_2));
+    syncScrollVert($(div1_2), $(div1_1));
+    syncScrollVert($(div2_1), $(div2_2));
+    syncScrollVert($(div2_2), $(div2_1));
+
+
 /*...
   Luego de esto ir al backend.
 */
