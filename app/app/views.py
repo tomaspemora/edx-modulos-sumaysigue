@@ -14,6 +14,8 @@ from app import db_initialization as db_init
 Bootstrap(app)
 
 app.config["IMAGE_UPLOADS"] = os.path.join(app.root_path,"uploads")
+
+
 @app.route("/")
 def index():
 	return render_template("public/index.html")
