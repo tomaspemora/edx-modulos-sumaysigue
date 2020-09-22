@@ -221,18 +221,20 @@ $(document).ready(function(){
   $('div[class^="i"]').each(function(){
     var $el = $(this);
      $el.draggable({
-          //connectToSortable: ".semanas",
-          revert: "invalid",
+          connectToSortable: ".semanas",
+          //revert: "invalid",
           cursor: "grabbing",
-          helper: "clone",
+          helper: "original",
           containment:$el.parent().parent().parent(),
           opacity: 1,
           zIndex: 2,
-          drag: function(event,ui){
-            $(this).css('z-index',2);$(this).parent().append($(this));
-            
-          },
-          stop: function(){$(this).css('z-index','');$(this).parent().append($(this));$(this).css('position','');}
+         drag: function(){
+           $(this).css('position','relative');
+         },
+         stop: function(){
+           $(this).parent().append($(this));
+           $(this).css('position','relative').css('top','unset').css('left','unset');
+         }
 
     });
   });
@@ -252,4 +254,26 @@ $(document).ready(function(){
     }
 
     );
+
+
+
+
+  //
+  // Boton maximizar y minimizar formulario de añadir tarjeta
+  //
+
+  $('#headerMinimize').click(function(){
+    $('#card-body').toggleClass('mostrar-carta');
+  });
+
+
+
+      // Default
+      //jQuery.scrollSpeed(100, 800);
+      
+      // Custom Easing
+     //jQuery.scrollSpeed(100, 800, 'easeOutCubic');
+      
+
+
 });

@@ -37,10 +37,12 @@
 		<div class="col parent-section-center columna-sin-overflow">
 			<div id="section-center-diseno" class="row columna-sin-overflow">
 				<div id="headers-diseno" class="col-sm-1 bg-danger columna-sin-overflow">
-					<div class="tagEquipo">
-						Diseño⠀⠀⠀⠀
+					<div class="row nombre-encargado">
+						<span>
+							Diseño⠀⠀⠀⠀
+						</span>
 					</div>
-					{% set disenadores = 2 %}
+					{% set disenadores = 4 %}
 					{% for i in range(1,disenadores+1) %}
 						<div id="tag-encargado-diseno-{{i}}" class="row nombre-encargado">
 							<span>
@@ -76,8 +78,10 @@
 			<div class="row" id="separator-prog-diseno"></div>
 			<div id="section-center-programacion" class="row columna-sin-overflow">
 				<div id="headers-programacion" class="col-sm-1 bg-info columna-sin-overflow">
-					<div class="tagEquipo">
-						Programación
+					<div class="row nombre-encargado">
+						<span>
+							Programación
+						</span>
 					</div>
 					{% set programadores = 4 %}
 					{% for i in range(1,programadores+1) %}
@@ -90,13 +94,14 @@
 				</div>
 				<div id="col-separator-programacion" class="col columna-sin-overflow">
 					{% set programadores = 4 %}
+					{% set random = imp0rt( 'random' ) %}
 					{% for i in range(1,programadores+1) %}
 					<div class="row row-de-semanas" id="encargado-programacion-{{i}}">
 						{% for i in range(1,semanas) %}
 						<div id='colsem_{{i}}' class="col semanas-prog">
 							{% for j in range(1,6) %}
 								{% if randrange(10)>5 %}
-									<div  data-toggle="popover" title="#i_{{i}}_j_{{j}}" class="i_{{i}} j_{{j}}" id="prog_i_{{i}}_j_{{j}}">
+									<div style="background-color:{{'rgb(' ~ random.randrange(0, 255) ~ ',' ~ (random.randrange(0, 255)) ~ ',' ~(random.randrange(0, 255)) ~ ')'}}" data-toggle="popover" title="#i_{{i}}_j_{{j}}" class="i_{{i}} j_{{j}}" id="prog_i_{{i}}_j_{{j}}">
 										<div class="delete-task"></div>
 										<span>prog_sem_{{i}}_tarea_{{j}} askdjlaskjdkasjdklsjldjasldjasdjaskld</span>
 									</div>
@@ -117,7 +122,11 @@
 	</div>
 	<div id="section-bottom"  class="row">
 		<div class="col bg-warning">
-			Filtros
+			<div class="crear-db">
+				<form action="/dashboard" id="crear-db" method="POST" enctype="multipart/form-data">
+					<input type="submit" name="form-button-db" id="form-button-crear-db" class="btn btn-primary" value="Crear db"/>
+				</form>
+			</div>
 		</div>
 	</div>
 
@@ -125,8 +134,9 @@
 
 <!-- Ventana para agregar tareas -->
 <div id="addtask" class="card">
-	<div id="headerDraggable">Mover</div>
-	<div class="card-body">
+	<div id="headerDraggable">Añadir tarea</div>
+	<div id="headerMinimize">+</div>
+	<div id="card-body" class="card-body">
 		<div>
 			<form action="/dashboard" id="select-params" method="POST" enctype="multipart/form-data">
 
@@ -141,7 +151,7 @@
 				{% endif %}
 			{% endfor %}
 
-			<input type="submit" name="form-button" id="form-button-addtask" class="btn btn-primary" value="Añadir"/>
+			<input type="submit" name="form-button-addtask" id="form-button-addtask" class="btn btn-primary" value="Añadir"/>
 			</form>
 		</div>
 	</div>
@@ -150,6 +160,7 @@
 
 
 <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jQuery.scrollSpeed.js') }}"></script>
 <script src="{{ url_for('static', filename='js/date-es-CL.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ResizeSensor.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ElementQueries.js') }}"></script>

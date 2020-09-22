@@ -92,14 +92,17 @@ programas = [
 				))
 			]
 style_addtask={'class':'form-control .mx-sm-3'}
-encargados = [('Programacion', (
+programadores = [('Programacion', (
+				('nonecesita','No necesita'),
 				('jorge','Jorge'),
 				('diego','Diego'),
 				('seba','Seba'),
 				('mati','Mati'),
 				('otro','Otro'),
-				)), 
-			('Diseño', (
+				))
+			]
+disenadores = [('Diseño', (
+				('nonecesita','No necesita'),
 				('cachorro','Cachorro'),
 				('fer','Fer'),
 				('Otro','otro'),
@@ -107,5 +110,9 @@ encargados = [('Programacion', (
 class AddTask(Form):
 	programa = ExtendedSelectField(u'Seleccione el programa', choices=programas, render_kw=style_addtask)
 	descripcion = StringField(u'Ingrese una descripción')
-	fecha = DateField(format='%Y-%m-%d',default=datetime.date.today,validators=[validators.DataRequired()])
-	encargado = ExtendedSelectField(u'Encargado', choices=encargados, render_kw=style_addtask)
+	disenador = ExtendedSelectField(u'Diseñador', choices=disenadores, render_kw=style_addtask)
+	fecha_diseno = DateField(format='%Y-%m-%d',default=datetime.date.today,validators=[validators.DataRequired()])
+	programador = ExtendedSelectField(u'Programador', choices=programadores, render_kw=style_addtask)
+	fecha_programacion = DateField(format='%Y-%m-%d',default=datetime.date.today,validators=[validators.DataRequired()])
+	archivo_guion = URLField(u'Archivo')
+

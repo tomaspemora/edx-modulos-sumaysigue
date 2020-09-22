@@ -9,7 +9,7 @@ body{
   text-align: center;
   right: 1rem;
   bottom: 1rem;
-  transform:scale(0.7);
+  transform:scale(0.9);
 }
 
 #headerDraggable {
@@ -17,6 +17,7 @@ body{
   cursor: move;
   background-color: #2196F3;
   color: #fff;
+  min-width:11vw;
 }
 
 .col-sm-1 {
@@ -126,7 +127,7 @@ background: #b9b9ff;
   border-top:3px solid;
   flex-wrap: nowrap;
   width:fit-content;
-
+  min-height: 110px;
 }
 
 .row-de-semanas:first-child{
@@ -159,13 +160,13 @@ background: #b9b9ff;
 
 
 .nombre-encargado{
-       width: 75%;
       margin: 0;
       left: 48%;
       position: relative;
       text-align: center;
       border-top:3px solid;
       border-left:1px solid;
+      min-height: 110px;
 
 }
 #tag-encargado-programacion-1,#tag-encargado-diseno-1{
@@ -175,7 +176,7 @@ background: #b9b9ff;
 .nombre-encargado  > span{
   position: relative;
   top: 95%;
-  left: 10px;
+  left: 20%;
   background: none;
   height: 40px;
   max-width: 7rem;
@@ -186,4 +187,43 @@ background: #b9b9ff;
   text-overflow: clip;
   white-space: nowrap;
   overflow: hidden;
+}
+
+#headers-diseno div:first-child span,#headers-programacion div:first-child span{
+  height: unset; 
+  max-width: 150px; 
+  width: fit-content; 
+  min-width: fit-content;
+  top:15px;
+}
+#headers-diseno div:first-child,#headers-programacion div:first-child{
+  top: 65%;
+  position: absolute;
+  left: 0;
+  border: none;
+}
+
+.nombre-encargado:last-child, .row-de-semanas:last-child{
+  border-bottom: 3px solid;
+}
+
+#headerMinimize{
+      position: absolute;
+      color: #2196f3;
+      font-weight: bold;
+      right: 3%;
+      font-size: 20px;
+      background-color: white;
+      border-radius: 29px;
+      width: 20px;
+      height: 20px;
+      line-height: 16px;
+      cursor: pointer;
+      top: 5px;
+      user-select: none
+
+  }
+
+.mostrar-carta{
+  display: none !important;
 }

@@ -1,17 +1,15 @@
 from app import app
 from flask import render_template
 import os
+import importlib
 from flask import send_from_directory
 from flask import request, redirect
 from flask_bootstrap import Bootstrap
 from app import jinja2_templates
 from app.formas_tipo import *
 from pdb import set_trace as bp
-
-
-
-
 from random import randrange
+from app import db_initialization as db_init
 
 Bootstrap(app)
 
@@ -30,8 +28,13 @@ def about():
 def dashboard():
 	form_addtask = AddTask(extra_classes='form-inline')
 	if request.method == "POST":
-		return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange)
-	return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange)
+		if str(next(request.form.keys())) == 'form-button-db':
+			db_init.create_db(db_init.db)
+
+		#if str(next(request.form.keys())) == 'form-button-db':
+
+		return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange, imp0rt = importlib.import_module)
+	return render_template("public/multimedia_dashboard.html",form_addtask = form_addtask,randrange=randrange, imp0rt = importlib.import_module)
 
 
 @app.route("/uploads", methods=["GET", "POST"])
