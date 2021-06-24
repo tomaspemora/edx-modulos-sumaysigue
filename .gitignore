@@ -3,3 +3,14 @@
 /app/__pycache__/*
 /app/app/__pycache__/*
 /foraws/*
+\app\env\*
+\env\*
+env/*
+new_user_credentials.csv
+app/app/keys-trello.json
+app/app/site.db
+# Elastic Beanstalk Files
+app/.elasticbeanstalk/*
+app/!.elasticbeanstalk/*.cfg.yml
+app/!.elasticbeanstalk/*.global.yml
+app/env/*

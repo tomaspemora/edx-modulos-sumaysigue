@@ -83,9 +83,9 @@ body{
 }
 
 .parent-section-center, .section-center{
-    height: 88vh !important;
-    min-height: 88vh !important;
-    max-height: 88vh!important;
+    height: 87.9vh !important;
+    min-height: 87.9vh !important;
+    max-height: 87.9vh!important;
 }
 
 [class^="i"]{

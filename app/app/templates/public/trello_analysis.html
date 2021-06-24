@@ -1,0 +1,264 @@
+{% extends "public/templates/public_template.html" %}
+{% import "public/templates/macros_template.html" as macros%}
+{% block title %}Trello Analysis{% endblock %}
+
+{% block main %}
+
+<style type="text/css">
+  .linea-tiempo{
+    background: white;
+    height: 100%;
+    padding: 0.2em;
+    max-width: 84%;
+    min-width: 58em;
+    width: 100%;
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin-left: 0;
+    margin-right: 0;
+    flex-wrap: unset;
+
+  }
+
+  .tarea{
+    height: 95%;
+    padding: 9px;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    color: white;
+    position: relative;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+  }
+
+  .tarea p{
+    font-size: 12px;
+    line-height: 12px;
+    margin-bottom: 1px;
+    display: block;
+
+
+  }
+
+  .tarea img, .tarea p.inline-p{
+    display: inline;
+    font-size: 10px;
+    overflow: hidden;
+    word-break: break-word;
+    text-align: left;
+    line-height: 12px;
+
+
+  }
+  .tarea img{
+    width: 13px;
+    height: 13px;
+    margin-right: 3px;
+    display: inline;
+  }
+
+  .tarea p.inline-p{
+
+    background: #2c8ff4;
+    padding: 4px;
+    border-radius: 4px;
+    display: block;
+    position: absolute;
+    width: 84%;
+    bottom: 4px;
+    max-height: 29%;
+  }
+  .tarjeta{
+    height: 200px;
+    border: 1px solid;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    flex-wrap: unset;
+  }
+
+  .tarjeta .col{
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .nombre-tarjeta{
+    background: #a6e1a6;
+    border: 1px solid;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .nombre-tarjeta-texto, .nombre-tarjeta-url{
+    text-align: center;
+    vertical-align: text-top;
+    bottom: -19px;
+    position: relative;
+  }
+  .nombre-tarjeta-url{
+    font-size: 12px;
+  }
+
+  .date-p{
+
+    word-break: keep-all;
+    text-align: right;
+    top: 2px;
+    right: 2px;
+    font-size: 9px !important;
+    white-space: nowrap;
+  }
+
+  .title-p{
+
+    height: 9%;
+  }
+
+  .action-p{
+
+    height: 42%;
+    min-height: 42%;
+    max-height: 42%;
+    font-size: 10px !important;
+  }
+  #modal{
+    position: fixed;
+    right: 10px;
+    height: auto;
+    top: 96px;
+    width: 387px;
+    border-radius: 14px;
+    background: #727272ad;
+    padding: 11px;
+    color: #ececec;
+    word-break: break-all;
+  }
+
+  .vl {
+
+    height: 100%;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+    background: green;
+    color: white;
+    writing-mode: tb-rl;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+    white-space: nowrap;
+    display: block;
+    font-size: 13px;
+    bottom: 0;
+    position: relative;
+
+    line-height: 12px;
+    height: 93%;
+
+  }
+
+  .vertical-p{
+    writing-mode: tb-rl;
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+    white-space: nowrap;
+    display: block;
+    font-size: 13px;
+    bottom: 0;
+    position: relative;
+    margin: 0 2px;
+    line-height: 12px;
+    height: 93%;
+
+  }
+
+  .info-stats{
+    position: fixed;
+    width: 19%;
+    max-width: 19%;
+    font-size: smaller;
+    top: 10%;
+    left: 1%;
+  }
+</style>
+
+<script type="text/javascript">
+function displayTooltip(element,html_data){
+  
+  console.log(html_data)
+  setTimeout(displayall, 300);
+
+  function displayall(){
+    console.log($(element).is(':hover'))
+    if($(element).is(':hover')){
+      html_data = html_data.replaceAll("\"\"","\\\"").replaceAll("\\","\"").replaceAll("'","\"").replaceAll("None","\"None\"").replaceAll("False","\"False\"").replaceAll("True","\"True\"").replaceAll(/\n/g, "\\n").replaceAll(/\\'/g, "\\'").replaceAll(/\\"/g, '\\"').replaceAll(/\\&/g, "\\&").replaceAll(/\\r/g, "\\r").replaceAll(/\\t/g, "\\t").replaceAll(/\\b/g, "\\b").replaceAll(/\\f/g, "\\f");
+
+      json_obj = JSON.parse(html_data);
+
+
+      $('#modal').html(
+                      element.outerHTML.replace(/onmouseenter(.*)\)\"/i, '')+
+                      '<pre style="white-space:pre-wrap;font-size:10px;text-align:justify;color:white">'+
+                      JSON.stringify(JSON.parse(html_data),null, 2)+
+                      "</pre>"
+                      );
+
+      $('#modal').fadeOut(0).fadeIn(300);
+    }
+  }
+  
+}
+
+function displayTooltip2(element,html_data){
+  
+
+  html_data = html_data.replaceAll("\"\"","\\\"").replaceAll("\\","\"").replaceAll("'","\"").replaceAll("None","\"None\"").replaceAll("False","\"False\"").replaceAll("True","\"True\"").replaceAll(/\n/g, "\\n").replaceAll(/\\'/g, "\\'").replaceAll(/\\"/g, '\\"').replaceAll(/\\&/g, "\\&").replaceAll(/\\r/g, "\\r").replaceAll(/\\t/g, "\\t").replaceAll(/\\b/g, "\\b").replaceAll(/\\f/g, "\\f");
+
+  console.log(html_data)
+  json_obj = JSON.parse(html_data);
+
+
+  $('#modal').html(
+              element.outerHTML.replace(/onmouseenter(.*)\)\"/i, '')+
+              '<pre style="white-space:pre-wrap;font-size:10px;text-align:justify;color:white">'+
+              JSON.stringify(JSON.parse(html_data),null, 2)+
+              "</pre>"
+              );
+
+  $('#modal').fadeOut(0).fadeIn(300);
+}
+
+</script>
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Trello Analysis</h1>
+    </div>
+  </div>
+
+  {{ macros.display_cards(cards,0) }}
+
+  <div id="modal">
+    
+  </div>
+
+  <!-- <div class="row">
+    <div class="col">
+     {{ macros.display_array(cards[0:1],0) }}
+    </div>
+  </div> -->
+
+  
+</div>
+
+{% endblock %}

@@ -10,21 +10,31 @@ from app.formas_tipo import *
 from pdb import set_trace as bp
 from random import randrange
 from app import db_initialization as db_init
+from app import trello_script as trelloObject
+import jinja2
+from app.customJinjaFilters import customStringDateFormat, customUnique, customReplace
+
+app.jinja_env.filters["customStringDateFormat"] = customStringDateFormat
+app.jinja_env.filters["customUnique"] = customUnique
+app.jinja_env.filters["customReplace"] = customReplace
 
 Bootstrap(app)
 
 app.config["IMAGE_UPLOADS"] = os.path.join(app.root_path,"uploads")
 
-
 @app.route("/")
 def index():
 	return render_template("public/index.html")
-
 
 @app.route("/about")
 def about():
 	return render_template("public/about.html")
 
+@app.route('/trello-analysis')
+def trello_analysis():
+	allcards = trelloObject.getAllCardsInfo()
+	return render_template("public/trello_analysis.html",cards = allcards)
+	# return render_template("public/trello_analysis.html")
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
@@ -110,3 +120,4 @@ def sign_up():
 @app.route('/favicon.ico')
 def favicon():
 	return send_from_directory(app.root_path,'favicon.ico',mimetype='image/vnd.microsoft.icon')
+

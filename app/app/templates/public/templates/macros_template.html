@@ -23,3 +23,189 @@
 	</ul>
 {% endif %}
 {% endmacro %}
+
+{% macro display_array(array,level) %}
+
+{% for object in array %}
+	
+	<p style="width: 500px;margin-left:{{30*level}}px">
+	{% if object is iterable and (object is not string and var is not mapping) %}
+		
+
+		{{- display_array(object,level+1) -}}
+		{{- display_array(array[object] ,level+1) -}}
+		
+			
+	{% else %}
+		{% if object is in ['card'] %}
+			<span style="color:red">
+		{% endif %}
+
+		{% if object is in ['type'] %}
+			<span style="background:purple;color:white">
+		{% endif %}
+
+
+		{% if object is in ['card','data','memberCreator', 'member', 'limits'] %}
+			{{object}} -> 
+			{{- display_array(array[object] ,level+1) -}}
+		{% else %}
+			{% if object is in ['shortLink'] %}
+				{{object}} -> <a target="_blank" href="https://trello.com/c/{{array[object]}}">https://trello.com/c/{{array[object]}}</a>
+			{% else %}
+				{{object}} -> {{array[object] }}
+			{% endif%}
+		{% endif %}
+
+		{% if object is in ['card','type'] %}
+			</span>
+		{% endif %}
+
+
+	{% endif %}
+	</p>
+	{% if level == 1 %}
+		<hr style="border: 1px solid blue;">
+	{% endif %}
+	{% if level == 0 %}
+		<hr style="border: 5px solid green;">
+	{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro display_cards(array,level) %}
+	{% set acciones_count = namespace(value=0) %}
+	{% set tarjetas_count = namespace(value=0) %}
+	{% set acciones_updateCard_list = [] %}
+	{% set acciones_list = [] %}
+	{% for card in array %}
+		{% set tarjetas_count.value = tarjetas_count.value + 1 %}
+	  <div class="row tarjeta">
+	    <div class="col col-sm-2">
+	      <div class="nombre-tarjeta" >
+	        <div class="nombre-tarjeta-texto">
+	          {{card[0]['data']['card']['name']}}
+	        </div>
+	        <div class="nombre-tarjeta-url">
+	          <a target="_blank" href="https://trello.com/c/{{card[0]['data']['card']['shortLink']}}">https://trello.com/c/{{card[0]['data']['card']['shortLink']}}</a>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="col">
+	      <div class="linea-tiempo row align-items-center">
+	      	{% set c1 = range(100,255) | random %}
+	        {% set c2 = range(100,255) | random %}
+	        {% set c3 = range(100,255) | random %}
+	        
+
+	      	{% for action in card|reverse %}
+	      		{% set acciones_count.value = acciones_count.value + 1 %}
+	      		{% set __ = acciones_list.append(action['type']) %}
+
+	      		{% if action['type'] is in ['updateCard','createCard','copyCard','removeMemberFromCard','addMemberToCard','commentCard','addChecklistToCard','removeChecklistFromCard','copyCommentCard','deleteAttachmentFromCard','updateChecklist', 'addAttachmentToCard', 'updateCheckItemStateOnCard'] %}
+	      			
+	      			{% set ite_val = namespace(value='') %}
+	      			{% for ite in action['data']['old'] %}
+	      				{% set ite_val.value = ite %}
+					{% endfor %}
+
+		      		{% if ite_val.value == 'idList' %}
+		      			
+		      			{% for ite in action['data']['listBefore'] %}
+			        		{% if ite == 'name'%}
+			        			<p class="vertical-p">
+			        				{{action['data']['listBefore'][ite]}}
+			        			</p>
+			        		{% endif %}
+			        	{% endfor %}
+
+		      			<div class="vl">
+		      				{{ action['date']  | customStringDateFormat }}
+		      			</div>
+
+		      			{% for ite in action['data']['listAfter'] %}
+			        		{% if ite == 'name'%}
+			        			<p class="vertical-p">
+			        				{{action['data']['listAfter'][ite]}}
+			        			</p>
+			        		{% endif %}
+			        	{% endfor %}
+
+		      		{% else %}
+
+			        {# <div onmouseenter='displayTooltip(this,"{{action}}")' class="tarea" style="background: rgb{{c1,c2,c3}};" > #}
+			        <div data-string='{{ action | customReplace }}' id="{{action['id']}}" onmouseenter='displayTooltip(this," {{ action | customReplace }}")' class="tarea" style="background: #7bd892" >
+
+			        	<p class="date-p">{{ action['date']  | customStringDateFormat }}</p>
+			        	<p class="title-p"><span style="color: blue;font-size:14px">{{action['type']}}</span></p>
+			        	
+			        	
+			        	{% for ite in action['data']['list'] %}
+			        		{% if ite == 'name'%}
+			        			<p class="action-p"><span style="color: #b437ae;font-weight: 600;">{{action['data']['list'][ite]}}</span></p>
+			        		{% endif %}
+			        	{% endfor %}
+
+			        	{% for ite in action['data']['listBefore'] %}
+			        		{% if ite == 'name'%}
+			        			<p class="action-p"><span style="color: #b437ae;font-weight: 600;">{{action['data']['listBefore'][ite]}}</span><span style="color:red">></span>
+			        		{% endif %}
+			        	{% endfor %}
+
+
+						{% for ite in action['data']['listAfter'] %}
+			        		{% if ite == 'name'%}
+			        			<span style="color: #b437ae;font-weight: 600;">{{action['data']['listAfter'][ite]}}</span></p>
+			        		{% endif %}
+			        	{% endfor %}
+
+			        	<p style="height:10%;font-size:8px">
+				        	{% if action['type'] == 'updateCard'%}
+					        	{% for ite in action['data']['old'] %}
+					        		{% set __ = acciones_updateCard_list.append(ite) %}
+					        	{% endfor %}
+			        		{% endif %}
+		        		</p>
+
+			        	<p class="inline-p">
+			        	{% if action['memberCreator']['avatarHash'] != None %}
+			        		<img src="https://trello-members.s3.amazonaws.com/{{action['memberCreator']['id']}}/{{action['memberCreator']['avatarHash']}}/30.png">
+			        	{% endif %}
+			        	<span style="display:inline">{{action['memberCreator']['fullName']}} - {{action['memberCreator']['username']}}</span>
+			        	</p>
+			        	
+			    	</div>
+			    	{% endif %}
+		    	{% endif %}
+	        {% endfor %}
+	      </div>
+	    </div>
+	  </div>
+	{% endfor %}
+	<div class="info-stats">
+		<p style="position:relative;"> numero de acciones registradas: {{acciones_count.value}}</p>
+		<p style="position:relative;"> numero tarjetas listadas: {{tarjetas_count.value}}</p>
+		<p style="position:relative;">
+			acciones ligadas a updateCard encontradas:
+		</p>
+		<ul style="position:relative;">
+			{% for accion in (acciones_updateCard_list  | customUnique) %}
+				<li>
+					{{accion}}
+				</li>
+			{% endfor %}
+		</ul>
+		
+		<p style="position:relative;">
+			acciones encontradas:
+		</p>
+		<ul style="position:relative;">
+			{% for accion in (acciones_list  | customUnique) %}
+				<li>
+					{{accion}}
+				</li>
+			{% endfor %}
+		</ul>
+
+	</div>
+{% endmacro %}

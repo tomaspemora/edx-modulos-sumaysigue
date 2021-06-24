@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/multimedia_dashboard.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
 
-	{% set semanas = 25 %}
+	{% set semanas = 42 %}
 	<div id="section-top" class="row">
 		<div class="col-sm-1">
 			<div id="backhome" >
@@ -15,14 +15,14 @@
 		</div>
 		<div id="col-header-semanas" class="col columna-sin-overflow bg-success">
 			<div class="row row-de-semanas row-semanas-header">
-				{% for i in range(12,12+semanas) %}
+				<!--{% for i in range(12,12+semanas) %}
 					{%if i < 10 %}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2020-W0{{i}}"step="1">
 					{%else%}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2020-W{{i}}"step="1">
 					{%endif%}
-				{% endfor %}
-				{% for i in range(1,0) %}
+				{% endfor %}-->
+				{% for i in range(12,12+semanas) %}
 					{%if i < 10 %}
 						<input class="semanitas" style="display:none;" type="week" name="semanaelegida" value="2021-W0{{i}}"step="1">
 					{%else%}
